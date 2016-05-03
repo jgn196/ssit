@@ -23,12 +23,13 @@ public class TheApplication {
      */
     @Test
     public void tracksTodoIssues() {
-        givenInitialisedProject();
+        givenAnEmptyInitialisedProject();
         addIssue("Create splash screen.");
-        assertThat(outstandingIssuesReport()).contains("Create splash screen.");
+        addIssue("Fix bug.");
+        assertThat(outstandingIssuesReport()).contains("Create splash screen.", "Fix bug.");
     }
 
-    private void givenInitialisedProject() {
+    private void givenAnEmptyInitialisedProject() {
         Ssit.main(new String[]{"init"});
     }
 
@@ -41,7 +42,7 @@ public class TheApplication {
         final ByteArrayOutputStream results = new ByteArrayOutputStream();
         System.setOut(new PrintStream(results));
         try {
-            Ssit.main(new String[]{});
+            Ssit.main(new String[]{"list"});
         } finally {
             System.setOut(sout);
         }

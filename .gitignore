@@ -1,3 +1,4 @@
 .gradle/**
 .idea/**
 ssit.iml
+build/**

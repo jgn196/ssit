@@ -17,6 +17,12 @@ public class Ssit {
             case "list":
                 printOutstandingIssues();
                 break;
+            case "close":
+                closeIssue(args);
+                break;
+            default:
+                System.out.println("Unknown command.");
+                break;
         }
     }
 
@@ -26,7 +32,7 @@ public class Ssit {
 
     private static void addNewIssue(final String args[]) {
         if (args.length != 2) {
-            System.err.println("No new issue description provided.");
+            System.out.println("No new issue description provided.");
             return;
         }
 
@@ -35,5 +41,14 @@ public class Ssit {
 
     private static void printOutstandingIssues() {
         issues.outstandingIssues().forEach(System.out::println);
+    }
+
+    private static void closeIssue(final String[] args) {
+        if(args.length != 2) {
+            System.out.println("No issue ID provided.");
+            return;
+        }
+
+        issues.close(Integer.parseInt(args[1]));
     }
 }

@@ -48,5 +48,25 @@ public class TheApplication {
         }
         return new String(results.toByteArray());
     }
-}
 
+    /*
+    Scenario:
+        Given a project has already been initialised for SSIT,
+        And it contains a known issue,
+        When the developer marks that issue as fixed,
+        And asks for a list of outstanding issues,
+        Then the known issue is not in the list.
+     */
+    @Test
+    public void tracksFixedIssues() {
+        givenAnEmptyInitialisedProject();
+        addIssue("Create splash screen.");
+        addIssue("Fix bug.");
+        closeIssue(1);
+        assertThat(outstandingIssuesReport()).contains("Fix bug.").doesNotContain("Create splash screen.");
+    }
+
+    private void closeIssue(int issueId) {
+        Ssit.main(new String[]{"close", Integer.toString(issueId)});
+    }
+}

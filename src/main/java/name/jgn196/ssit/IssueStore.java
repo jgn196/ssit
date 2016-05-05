@@ -6,4 +6,6 @@ interface IssueStore {
     Issue newIssue(final String description);
 
     Iterable<Issue> outstandingIssues();
+
+    void close(int issueId);
 }

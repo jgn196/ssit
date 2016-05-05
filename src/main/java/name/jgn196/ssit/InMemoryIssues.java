@@ -8,7 +8,7 @@ class InMemoryIssues implements IssueStore {
 
     @Override
     public void init() {
-        // Do nothing
+        issues.clear();
     }
 
     @Override
@@ -23,5 +23,10 @@ class InMemoryIssues implements IssueStore {
     @Override
     public Iterable<Issue> outstandingIssues() {
         return issues;
+    }
+
+    @Override
+    public void close(int issueId) {
+        issues.remove(issueId - 1);
     }
 }

@@ -7,7 +7,7 @@ public class Ssit {
 
     public static final String TODO_DIRECTORY_NAME = ".todo";
 
-    private static final ArrayList<String> issues = new ArrayList<>();
+    private static final IssueStore issues = new InMemoryIssues();
     private static final File TODO_DIRECTORY = new File(TODO_DIRECTORY_NAME);
 
     public static void main(final String[] args) {
@@ -15,16 +15,31 @@ public class Ssit {
 
         switch (args[0]) {
             case "init":
-                if (!TODO_DIRECTORY.exists())
-                    TODO_DIRECTORY.mkdir();
+                initialiseIssueStore();
                 break;
             case "todo":
-                if (args.length >= 2)
-                    issues.add(args[1]);
+                addNewIssue(args);
                 break;
             case "list":
-                issues.forEach(System.out::println);
+                printOutstandingIssues();
                 break;
         }
+    }
+
+    private static void initialiseIssueStore() {
+        issues.init();
+    }
+
+    private static void addNewIssue(final String args[]) {
+        if (args.length != 2) {
+            System.err.println("No new issue description provided.");
+            return;
+        }
+
+        issues.newIssue(args[1]);
+    }
+
+    private static void printOutstandingIssues() {
+        issues.outstandingIssues().forEach(System.out::println);
     }
 }

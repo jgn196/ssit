@@ -9,8 +9,8 @@ class Issue {
         this.description = description;
     }
 
-    public int id() {
-        return id;
+    public boolean matchesId(final int id) {
+        return this.id == id;
     }
 
     @Override

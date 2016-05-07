@@ -31,7 +31,7 @@ class InMemoryIssues implements IssueStore {
 
     @Override
     public void close(int issueId) {
-        issues.removeIf(issue -> issue.id() == issueId);
+        issues.removeIf(issue -> issue.matchesId(issueId));
     }
 
     @Override

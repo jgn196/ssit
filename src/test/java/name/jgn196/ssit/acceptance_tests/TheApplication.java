@@ -46,7 +46,9 @@ public class TheApplication {
         } finally {
             System.setOut(sout);
         }
-        return new String(results.toByteArray());
+        final String result = new String(results.toByteArray());
+        System.out.println(result);
+        return result;
     }
 
     /*

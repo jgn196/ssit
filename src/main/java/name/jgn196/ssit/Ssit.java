@@ -40,7 +40,7 @@ public class Ssit {
     }
 
     private static void printOutstandingIssues() {
-        issues.outstandingIssues().forEach(System.out::println);
+        issues.printOutstanding(System.out);
     }
 
     private static void closeIssue(final String[] args) {

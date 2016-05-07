@@ -1,5 +1,7 @@
 package name.jgn196.ssit;
 
+import java.io.PrintStream;
+
 interface IssueStore {
     void init();
 
@@ -8,4 +10,6 @@ interface IssueStore {
     Iterable<Issue> outstandingIssues();
 
     void close(int issueId);
+
+    void printOutstanding(PrintStream printStream);
 }

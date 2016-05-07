@@ -13,7 +13,7 @@ As a Software Developer,
 I want to track the issues I have left to fix,
 So I don't forget any.
  */
-public class TheApplication {
+public class TheApplicationTracksIssues {
     /*
     Scenario:
          Given a project has already been initialised for SSIT,
@@ -22,7 +22,7 @@ public class TheApplication {
          Then the results contain the new issue.
      */
     @Test
-    public void tracksTodoIssues() {
+    public void byListingNewIssues() {
         givenAnEmptyInitialisedProject();
         addIssue("Create splash screen.");
         addIssue("Fix bug.");
@@ -60,7 +60,7 @@ public class TheApplication {
         Then the known issue is not in the list.
      */
     @Test
-    public void tracksFixedIssues() {
+    public void byNotListingClosedIssues() {
         givenAnEmptyInitialisedProject();
         addIssue("Create splash screen.");
         addIssue("Fix bug.");

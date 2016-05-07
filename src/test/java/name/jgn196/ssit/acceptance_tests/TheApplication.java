@@ -72,3 +72,4 @@ public class TheApplication {
         Ssit.main(new String[]{"close", Integer.toString(issueId)});
     }
 }
+

@@ -9,8 +9,12 @@ class Issue {
         this.description = description;
     }
 
+    public int id() {
+        return id;
+    }
+
     @Override
     public String toString() {
-        return "" + id + ":\t" + description;
+        return id + ":\t" + description;
     }
 }

@@ -25,11 +25,6 @@ class InMemoryIssues implements IssueStore {
     }
 
     @Override
-    public Iterable<Issue> outstandingIssues() {
-        return issues;
-    }
-
-    @Override
     public void close(int issueId) {
         issues.removeIf(issue -> issue.matchesId(issueId));
     }

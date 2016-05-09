@@ -17,4 +17,20 @@ class Issue {
     public String toString() {
         return id + ":\t" + description;
     }
+
+    public void exportTo(final IssueExporter exporter) {
+        exporter.withId(id)
+                .withDescription(description)
+                .export();
+    }
+
+    public interface IssueExporter {
+
+        IssueExporter withId(int id);
+
+        IssueExporter withDescription(String value);
+
+        void export();
+    }
 }
+

@@ -5,9 +5,7 @@ import java.io.PrintStream;
 interface IssueStore {
     void init();
 
-    Issue newIssue(final String description);
-
-    Iterable<Issue> outstandingIssues();
+    Issue newIssue(String description);
 
     void close(int issueId);
 

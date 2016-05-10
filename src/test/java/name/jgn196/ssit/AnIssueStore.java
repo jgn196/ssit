@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Arrays;
+import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -21,7 +22,7 @@ public class AnIssueStore {
     @Before
     public void clearIssueStore() {
         final File issueDirectory = new File(".todo");
-        if(issueDirectory.exists()) {
+        if (issueDirectory.exists()) {
             for (final File file : issueDirectory.listFiles()) {
                 file.delete();
             }
@@ -31,9 +32,7 @@ public class AnIssueStore {
 
     @Parameters()
     public static Iterable<Object[]> parameters() {
-        return Arrays.asList(
-                new Object[]{new InMemoryIssues()},
-                new Object[]{new OnDiskIssues()});
+        return Collections.singletonList(new Object[]{new OnDiskIssues()});
     }
 
     @Parameter
@@ -46,7 +45,7 @@ public class AnIssueStore {
         store.newIssue("Issue 1");
 
         try (final ByteArrayOutputStream results = new ByteArrayOutputStream()) {
-            try(final PrintStream printStream = new PrintStream(results)){
+            try (final PrintStream printStream = new PrintStream(results)) {
                 store.printOutstanding(printStream);
             }
 
@@ -67,7 +66,7 @@ public class AnIssueStore {
         store.close(3);
 
         try (final ByteArrayOutputStream results = new ByteArrayOutputStream()) {
-            try(final PrintStream printStream = new PrintStream(results)){
+            try (final PrintStream printStream = new PrintStream(results)) {
                 store.printOutstanding(printStream);
             }
 

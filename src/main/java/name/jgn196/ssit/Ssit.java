@@ -2,7 +2,7 @@ package name.jgn196.ssit;
 
 public class Ssit {
 
-    private static final IssueStore issues = new InMemoryIssues();
+    private static final IssueStore issues = new OnDiskIssues();
 
     public static void main(final String[] args) {
         if (args.length == 0) return; // TODO - Print usage

@@ -1,9 +1,11 @@
 package name.jgn196.ssit.acceptance_tests;
 
 import name.jgn196.ssit.Ssit;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.PrintStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -14,6 +16,18 @@ I want to track the issues I have left to fix,
 So I don't forget any.
  */
 public class TheApplicationTracksIssues {
+
+    @Before
+    public void clearIssueStore() {
+        final File issueDirectory = new File(".todo");
+        if(issueDirectory.exists()) {
+            for (final File file : issueDirectory.listFiles()) {
+                file.delete();
+            }
+            issueDirectory.delete();
+        }
+    }
+
     /*
     Scenario:
          Given a project has already been initialised for SSIT,

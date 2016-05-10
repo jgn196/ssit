@@ -2,22 +2,15 @@ package name.jgn196.ssit;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameter;
-import org.junit.runners.Parameterized.Parameters;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.util.Arrays;
-import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(Parameterized.class)
-public class AnIssueStore {
+public class AnOnDiskIssues {
 
     @Before
     public void clearIssueStore() {
@@ -30,13 +23,7 @@ public class AnIssueStore {
         }
     }
 
-    @Parameters()
-    public static Iterable<Object[]> parameters() {
-        return Collections.singletonList(new Object[]{new OnDiskIssues()});
-    }
-
-    @Parameter
-    public IssueStore store;
+    public IssueStore store = new OnDiskIssues();
 
     @Test
     public void tracksNewIssues() throws IOException {

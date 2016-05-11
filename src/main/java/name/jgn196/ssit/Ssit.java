@@ -1,8 +1,10 @@
 package name.jgn196.ssit;
 
+import java.io.File;
+
 public class Ssit {
 
-    private static final IssueStore issues = new OnDiskIssues();
+    private static final IssueStore issues = new OnDiskIssues(new File(".todo"));
 
     public static void main(final String[] args) {
         if (args.length == 0) return; // TODO - Print usage

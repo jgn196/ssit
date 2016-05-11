@@ -7,26 +7,24 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class AnOnDiskIssues {
 
-    @Before
-    public void clearIssueStore() {
-        final File issueDirectory = new File(".todo");
-        if (issueDirectory.exists()) {
-            for (final File file : issueDirectory.listFiles()) {
-                file.delete();
-            }
-            issueDirectory.delete();
-        }
-    }
+    private File testDirectory;
 
-    public IssueStore store = new OnDiskIssues();
+    @Before
+    public void createTestDirectory() throws IOException {
+        testDirectory = Files.createTempDirectory("ssit_test").toFile();
+    }
 
     @Test
     public void tracksNewIssues() throws IOException {
+        final IssueStore store = new OnDiskIssues(testDirectory);
+
         store.init();
 
         store.newIssue("Issue 1");
@@ -42,6 +40,8 @@ public class AnOnDiskIssues {
 
     @Test
     public void closesIssuesById() throws IOException {
+        final IssueStore store = new OnDiskIssues(testDirectory);
+
         store.init();
 
         store.newIssue("Issue 1");
@@ -58,6 +58,16 @@ public class AnOnDiskIssues {
             }
 
             assertThat(new String(results.toByteArray())).isEmpty();
+        }
+    }
+
+    @Before
+    public void deleteTestDirectory() {
+        if (testDirectory.exists()) {
+            for (final File file : testDirectory.listFiles()) {
+                file.delete();
+            }
+            testDirectory.delete();
         }
     }
 }

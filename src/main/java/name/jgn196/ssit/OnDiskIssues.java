@@ -80,7 +80,8 @@ class OnDiskIssues implements IssueStore {
         try {
             for (final String issueId : Files.readAllLines(openIssuesFile)) {
                 final int id = Integer.parseInt(issueId);
-                final String description = new String(Files.readAllBytes(todoDirectory.toPath().resolve(issueId + ".txt")), "UTF-8");
+                final String description = new String(
+                        Files.readAllBytes(todoDirectory.toPath().resolve(issueId + ".txt")), "UTF-8");
                 printStream.println(new Issue(id, description).toString());
             }
         } catch (IOException e) {

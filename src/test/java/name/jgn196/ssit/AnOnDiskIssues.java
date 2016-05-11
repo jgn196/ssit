@@ -8,7 +8,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.file.Files;
-import java.nio.file.Path;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -63,10 +62,12 @@ public class AnOnDiskIssues {
 
     @Before
     public void deleteTestDirectory() {
-        if (testDirectory.exists()) {
+        if (testDirectory.exists() && testDirectory.isDirectory()) {
+
             for (final File file : testDirectory.listFiles()) {
                 file.delete();
             }
+            
             testDirectory.delete();
         }
     }

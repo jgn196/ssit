@@ -67,7 +67,7 @@ public class AnOnDiskIssues {
             for (final File file : testDirectory.listFiles()) {
                 file.delete();
             }
-            
+
             testDirectory.delete();
         }
     }

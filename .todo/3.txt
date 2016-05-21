@@ -1,0 +1,1 @@
+SSIT should provide usage feedback when called with no arguments.

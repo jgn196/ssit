@@ -1,5 +1,7 @@
 package name.jgn196.ssit;
 
+import org.apache.commons.io.FileUtils;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -60,15 +62,12 @@ public class AnOnDiskIssues {
         }
     }
 
-    @Before
-    public void deleteTestDirectory() {
+    @After
+    public void deleteTestDirectory() throws IOException {
+
         if (testDirectory.exists() && testDirectory.isDirectory()) {
 
-            for (final File file : testDirectory.listFiles()) {
-                file.delete();
-            }
-
-            testDirectory.delete();
+            FileUtils.deleteDirectory(testDirectory);
         }
     }
 }

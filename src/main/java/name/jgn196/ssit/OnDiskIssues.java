@@ -70,7 +70,7 @@ class OnDiskIssues implements IssueStore {
                             .stream()
                             .filter(id -> !id.equals(Integer.toString(issueId)))
                             .collect(Collectors.toList()));
-        } catch (IOException e) {
+        } catch (final IOException e) {
             throw new RuntimeException("Failed to update open issues file.", e);
         }
     }

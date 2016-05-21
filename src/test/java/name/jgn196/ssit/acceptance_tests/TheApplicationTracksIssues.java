@@ -1,12 +1,18 @@
 package name.jgn196.ssit.acceptance_tests;
 
-import name.jgn196.ssit.Ssit;
+import org.apache.commons.io.FileUtils;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.PrintStream;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -17,15 +23,15 @@ So I don't forget any.
  */
 public class TheApplicationTracksIssues {
 
+    private File testDirectory;
+
     @Before
-    public void clearIssueStore() {
-        final File issueDirectory = new File(".todo");
-        if(issueDirectory.exists()) {
-            for (final File file : issueDirectory.listFiles()) {
-                file.delete();
-            }
-            issueDirectory.delete();
-        }
+    public void createTestDirectory() throws IOException {
+
+        testDirectory = Files.createTempDirectory("ssit_test").toFile();
+        if (testDirectory.exists()) return;
+
+        assertThat(testDirectory.mkdir()).isTrue();
     }
 
     /*
@@ -36,33 +42,51 @@ public class TheApplicationTracksIssues {
          Then the results contain the new issue.
      */
     @Test
-    public void byListingNewIssues() {
+    public void byListingNewIssues() throws IOException, InterruptedException {
         givenAnEmptyInitialisedProject();
         addIssue("Create splash screen.");
         addIssue("Fix bug.");
         assertThat(outstandingIssuesReport()).contains("Create splash screen.", "Fix bug.");
     }
 
-    private void givenAnEmptyInitialisedProject() {
-        Ssit.main(new String[]{"init"});
+    private void givenAnEmptyInitialisedProject() throws IOException, InterruptedException {
+        runSsit("init");
+
+        assertThat(testDirectory.toPath().resolve(".todo").toFile())
+                .exists()
+                .isDirectory();
     }
 
-    private void addIssue(final String issueText) {
-        Ssit.main(new String[]{"todo", issueText});
-    }
+    private String runSsit(final String... commands) throws IOException, InterruptedException {
 
-    private String outstandingIssuesReport() {
-        final PrintStream sout = System.out;
-        final ByteArrayOutputStream results = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(results));
-        try {
-            Ssit.main(new String[]{"list"});
-        } finally {
-            System.setOut(sout);
-        }
-        final String result = new String(results.toByteArray());
-        System.out.println(result);
+        final Path classPath = Paths.get(".", "build", "classes", "main").toAbsolutePath();
+        final List<String> processArguments = new ArrayList<>();
+        final File outputFile = Files.createTempFile("ssit_out", ".txt").toFile();
+        outputFile.deleteOnExit();
+
+        processArguments.addAll(Arrays.asList(
+                "java", "-cp", classPath.toString(), "name.jgn196.ssit.Ssit"));
+        processArguments.addAll(Arrays.asList(commands));
+
+        final Process process = new ProcessBuilder(processArguments)
+                .directory(testDirectory)
+                .redirectError(ProcessBuilder.Redirect.INHERIT)
+                .redirectOutput(ProcessBuilder.Redirect.to(outputFile))
+                .start();
+        assertThat(process.waitFor()).isZero();
+
+        final String result = FileUtils.readFileToString(outputFile);
+
+        System.out.print(result);
         return result;
+    }
+
+    private void addIssue(final String issueText) throws IOException, InterruptedException {
+        runSsit("todo", issueText);
+    }
+
+    private String outstandingIssuesReport() throws IOException, InterruptedException {
+        return runSsit("list");
     }
 
     /*
@@ -74,7 +98,7 @@ public class TheApplicationTracksIssues {
         Then the known issue is not in the list.
      */
     @Test
-    public void byNotListingClosedIssues() {
+    public void byNotListingClosedIssues() throws IOException, InterruptedException {
         givenAnEmptyInitialisedProject();
         addIssue("Create splash screen.");
         addIssue("Fix bug.");
@@ -82,8 +106,17 @@ public class TheApplicationTracksIssues {
         assertThat(outstandingIssuesReport()).contains("Fix bug.").doesNotContain("Create splash screen.");
     }
 
-    private void closeIssue(int issueId) {
-        Ssit.main(new String[]{"close", Integer.toString(issueId)});
+    private void closeIssue(int issueId) throws IOException, InterruptedException {
+        runSsit("close", Integer.toString(issueId));
+    }
+
+    @After
+    public void deleteTestDirectory() throws IOException {
+
+        if (testDirectory.exists() && testDirectory.isDirectory()) {
+
+            FileUtils.deleteDirectory(testDirectory);
+        }
     }
 }
 

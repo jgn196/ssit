@@ -23,11 +23,11 @@ So I don't forget any.
  */
 public class TheApplicationTracksIssues {
 
+    public static final Path SSIT_CLASS_PATH = Paths.get(".", "build", "classes", "main").toAbsolutePath();
     private File testDirectory;
 
     @Before
     public void createTestDirectory() throws IOException {
-
         testDirectory = Files.createTempDirectory("ssit_test").toFile();
         if (testDirectory.exists()) return;
 
@@ -44,40 +44,54 @@ public class TheApplicationTracksIssues {
     @Test
     public void byListingNewIssues() throws IOException, InterruptedException {
         givenAnEmptyInitialisedProject();
+
         addIssue("Create splash screen.");
         addIssue("Fix bug.");
+
         assertThat(outstandingIssuesReport()).contains("Create splash screen.", "Fix bug.");
     }
 
     private void givenAnEmptyInitialisedProject() throws IOException, InterruptedException {
         runSsit("init");
 
-        assertThat(testDirectory.toPath().resolve(".todo").toFile())
-                .exists()
-                .isDirectory();
+        assertTestDirectoryContainsTodoDirectory();
+    }
+
+    private void assertTestDirectoryContainsTodoDirectory() {
+        final File todoDirectory = testDirectory.toPath().resolve(".todo").toFile();
+
+        assertThat(todoDirectory).exists().isDirectory();
     }
 
     private String runSsit(final String... commands) throws IOException, InterruptedException {
-
-        final Path classPath = Paths.get(".", "build", "classes", "main").toAbsolutePath();
-        final List<String> processArguments = new ArrayList<>();
-        final File outputFile = Files.createTempFile("ssit_out", ".txt").toFile();
-        outputFile.deleteOnExit();
-
-        processArguments.addAll(Arrays.asList(
-                "java", "-cp", classPath.toString(), "name.jgn196.ssit.Ssit"));
-        processArguments.addAll(Arrays.asList(commands));
-
-        final Process process = new ProcessBuilder(processArguments)
+        final File outputFile = temporaryOutputFile();
+        final Process process = new ProcessBuilder(ssitProcessArguments(commands))
                 .directory(testDirectory)
                 .redirectError(ProcessBuilder.Redirect.INHERIT)
                 .redirectOutput(ProcessBuilder.Redirect.to(outputFile))
                 .start();
+
         assertThat(process.waitFor()).isZero();
 
         final String result = FileUtils.readFileToString(outputFile);
 
         System.out.print(result);
+
+        return result;
+    }
+
+    private File temporaryOutputFile() throws IOException {
+        final File result = Files.createTempFile("ssit_out", ".txt").toFile();
+        result.deleteOnExit();
+
+        return result;
+    }
+
+    private List<String> ssitProcessArguments(final String... commands) {
+        final List<String> result = new ArrayList<>(
+                Arrays.asList("java", "-cp", SSIT_CLASS_PATH.toString(), "name.jgn196.ssit.Ssit"));
+        result.addAll(Arrays.asList(commands));
+
         return result;
     }
 
@@ -100,9 +114,12 @@ public class TheApplicationTracksIssues {
     @Test
     public void byNotListingClosedIssues() throws IOException, InterruptedException {
         givenAnEmptyInitialisedProject();
+
         addIssue("Create splash screen.");
         addIssue("Fix bug.");
+
         closeIssue(1);
+
         assertThat(outstandingIssuesReport()).contains("Fix bug.").doesNotContain("Create splash screen.");
     }
 
@@ -112,11 +129,9 @@ public class TheApplicationTracksIssues {
 
     @After
     public void deleteTestDirectory() throws IOException {
-
         if (testDirectory.exists() && testDirectory.isDirectory()) {
 
             FileUtils.deleteDirectory(testDirectory);
         }
     }
 }
-

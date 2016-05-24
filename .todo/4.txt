@@ -1,0 +1,1 @@
+SSIT should provide success feedback when an issue is closed.

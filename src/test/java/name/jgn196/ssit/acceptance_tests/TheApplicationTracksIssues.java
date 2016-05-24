@@ -52,7 +52,9 @@ public class TheApplicationTracksIssues {
     }
 
     private void givenAnEmptyInitialisedProject() throws IOException, InterruptedException {
-        assertThat(runSsit("init")).as("Command output").contains("Project initialised");
+        final String commandOutput = runSsit("init");
+
+        assertThat(commandOutput).as("Command output").contains("Project initialised");
 
         assertTestDirectoryContainsTodoDirectory();
     }
@@ -96,7 +98,9 @@ public class TheApplicationTracksIssues {
     }
 
     private void addIssue(final String issueText) throws IOException, InterruptedException {
-        runSsit("todo", issueText);
+        final String commandOutput = runSsit("todo", issueText);
+
+        assertThat(commandOutput).as("Command output").contains("Issue added.");
     }
 
     private String outstandingIssuesReport() throws IOException, InterruptedException {

@@ -40,6 +40,8 @@ public class Ssit {
         }
 
         issues.newIssue(args[1]);
+
+        System.out.println("Issue added.");
     }
 
     private static void printOutstandingIssues() {

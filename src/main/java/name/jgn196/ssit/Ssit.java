@@ -30,6 +30,7 @@ public class Ssit {
 
     private static void initialiseIssueStore() {
         issues.init();
+        System.out.println("Project initialised.");
     }
 
     private static void addNewIssue(final String args[]) {

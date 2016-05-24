@@ -52,7 +52,7 @@ public class TheApplicationTracksIssues {
     }
 
     private void givenAnEmptyInitialisedProject() throws IOException, InterruptedException {
-        runSsit("init");
+        assertThat(runSsit("init")).as("Command output").contains("Project initialised");
 
         assertTestDirectoryContainsTodoDirectory();
     }

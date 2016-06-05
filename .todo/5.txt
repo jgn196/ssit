@@ -1,0 +1,1 @@
+SSIT running batch file should work when called from a different directory.

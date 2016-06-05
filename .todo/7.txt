@@ -1,0 +1,1 @@
+SSIT should work when used from a child of the SSIT project directory.

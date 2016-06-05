@@ -1,0 +1,1 @@
+SSIT running shell script should work when called from a different directory.

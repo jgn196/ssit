@@ -4,10 +4,20 @@ import java.io.File;
 
 public class Ssit {
 
-    private static final IssueStore issues = new OnDiskIssues(new File(".todo"));
+    private static final IssueStore ISSUES = new OnDiskIssues(new File(".todo"));
+    private static final String USAGE = "usage: ssit <command> [<args>]\n" +
+            "\n" +
+            "Commands:\n" +
+            "\tclose\tClose an issue.\n" +
+            "\tinit\tInitialise a new SSIT project.\n" +
+            "\tlist\tList the outstanding issues.\n" +
+            "\ttodo\tAdd a new issue.";
 
     public static void main(final String[] args) {
-        if (args.length == 0) return; // TODO - Print usage
+        if (args.length == 0) {
+            System.out.println(USAGE);
+            return;
+        }
 
         switch (args[0]) {
             case "init":
@@ -29,31 +39,35 @@ public class Ssit {
     }
 
     private static void initialiseIssueStore() {
-        issues.init();
+        ISSUES.init();
         System.out.println("Project initialised.");
     }
 
     private static void addNewIssue(final String args[]) {
         if (args.length != 2) {
-            System.out.println("No new issue description provided.");
+            System.out.println("No new issue description provided.\n" +
+                    "\n" +
+                    "usage: ssit todo <issue description>");
             return;
         }
 
-        issues.newIssue(args[1]);
+        ISSUES.newIssue(args[1]);
 
         System.out.println("Issue added.");
     }
 
     private static void printOutstandingIssues() {
-        issues.printOutstanding(System.out);
+        ISSUES.printOutstanding(System.out);
     }
 
     private static void closeIssue(final String[] args) {
-        if(args.length != 2) {
-            System.out.println("No issue ID provided.");
+        if (args.length != 2) {
+            System.out.println("No issue ID provided.\n" +
+                    "\n" +
+                    "usage: ssit close <issue ID>");
             return;
         }
 
-        issues.close(Integer.parseInt(args[1]));
+        ISSUES.close(Integer.parseInt(args[1]));
     }
 }

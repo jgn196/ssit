@@ -69,5 +69,7 @@ public class Ssit {
         }
 
         ISSUES.close(Integer.parseInt(args[1]));
+
+        System.out.println("Issue closed.");
     }
 }

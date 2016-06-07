@@ -85,7 +85,7 @@ public class TheApplicationTracksIssues {
     }
 
     private void closeIssue(int issueId) throws IOException, InterruptedException {
-        applicationRun.runSsit("close", Integer.toString(issueId));
+        assertThat(applicationRun.runSsit("close", Integer.toString(issueId))).contains("Issue closed.");
     }
 
     @After

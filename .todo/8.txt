@@ -1,0 +1,1 @@
+Handle running SSIT in directory with no SSIT project.

@@ -1,1 +1,1 @@
-@java -cp .\build\classes\main name.jgn196.ssit.Ssit %*
+@java -cp "%~dp0build\classes\main" name.jgn196.ssit.Ssit %*

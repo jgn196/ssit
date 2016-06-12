@@ -9,7 +9,7 @@ import java.nio.file.StandardOpenOption;
 import java.util.stream.Collectors;
 
 class OnDiskIssues implements IssueStore {
-    
+
     private final File todoDirectory;
     private final Path nextIdFile;
     private final Path openIssuesFile;
@@ -76,7 +76,9 @@ class OnDiskIssues implements IssueStore {
     }
 
     @Override
-    public void printOutstanding(final PrintStream printStream) {
+    public void printOutstanding(final PrintStream printStream) throws NoSsitProject {
+        if (!todoDirectory.exists()) throw new NoSsitProject();
+
         try {
             for (final String issueId : Files.readAllLines(openIssuesFile)) {
                 final int id = Integer.parseInt(issueId);
@@ -84,8 +86,12 @@ class OnDiskIssues implements IssueStore {
                         Files.readAllBytes(todoDirectory.toPath().resolve(issueId + ".txt")), "UTF-8");
                 printStream.println(new Issue(id, description).toString());
             }
-        } catch (IOException e) {
+        } catch (final IOException e) {
             throw new RuntimeException("Failed to read open issues file.", e);
         }
     }
+}
+
+class NoSsitProject extends Exception {
+
 }

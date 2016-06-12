@@ -23,7 +23,7 @@ public class AnOnDiskIssues {
     }
 
     @Test
-    public void tracksNewIssues() throws IOException {
+    public void tracksNewIssues() throws IOException, NoSsitProject {
         final IssueStore store = new OnDiskIssues(testDirectory);
 
         store.init();
@@ -40,7 +40,7 @@ public class AnOnDiskIssues {
     }
 
     @Test
-    public void closesIssuesById() throws IOException {
+    public void closesIssuesById() throws IOException, NoSsitProject {
         final IssueStore store = new OnDiskIssues(testDirectory);
 
         store.init();

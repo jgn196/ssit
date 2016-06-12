@@ -9,5 +9,5 @@ interface IssueStore {
 
     void close(int issueId);
 
-    void printOutstanding(PrintStream printStream);
+    void printOutstanding(PrintStream printStream) throws NoSsitProject;
 }

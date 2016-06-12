@@ -48,4 +48,10 @@ public class TheApplicationProvidesHelp {
                 .contains("close")
                 .contains("issue ID");
     }
+
+    @Test
+    public void byPointingOutWhenItIsRunInADirectoryWithNoSsitProject() throws IOException, InterruptedException {
+        assertThat(applicationRun.runSsit("list"))
+                .contains("no SSIT project");
+    }
 }

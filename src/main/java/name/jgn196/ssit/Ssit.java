@@ -19,22 +19,26 @@ public class Ssit {
             return;
         }
 
-        switch (args[0]) {
-            case "init":
-                initialiseIssueStore();
-                break;
-            case "todo":
-                addNewIssue(args);
-                break;
-            case "list":
-                printOutstandingIssues();
-                break;
-            case "close":
-                closeIssue(args);
-                break;
-            default:
-                System.out.println("Unknown command.");
-                break;
+        try {
+            switch (args[0]) {
+                case "init":
+                    initialiseIssueStore();
+                    break;
+                case "todo":
+                    addNewIssue(args);
+                    break;
+                case "list":
+                    printOutstandingIssues();
+                    break;
+                case "close":
+                    closeIssue(args);
+                    break;
+                default:
+                    System.out.println("Unknown command.");
+                    break;
+            }
+        } catch(final NoSsitProject error) {
+            System.out.println("There is no SSIT project in the current directory (or any of its parents).");
         }
     }
 
@@ -56,7 +60,7 @@ public class Ssit {
         System.out.println("Issue added.");
     }
 
-    private static void printOutstandingIssues() {
+    private static void printOutstandingIssues() throws NoSsitProject{
         ISSUES.printOutstanding(System.out);
     }
 

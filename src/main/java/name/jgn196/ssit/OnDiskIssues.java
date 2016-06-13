@@ -28,7 +28,9 @@ class OnDiskIssues implements IssueStore {
     }
 
     @Override
-    public Issue newIssue(final String description) {
+    public Issue newIssue(final String description) throws NoSsitProject {
+        checkForSsitProject();
+
         final int issueId = nextIssueId();
         final Issue result = new Issue(issueId, description);
         result.exportTo(new FileIssueExporter(todoDirectory));
@@ -44,6 +46,10 @@ class OnDiskIssues implements IssueStore {
         }
 
         return result;
+    }
+
+    private void checkForSsitProject() throws NoSsitProject {
+        if (!todoDirectory.exists()) throw new NoSsitProject();
     }
 
     private int nextIssueId() {
@@ -77,7 +83,7 @@ class OnDiskIssues implements IssueStore {
 
     @Override
     public void printOutstanding(final PrintStream printStream) throws NoSsitProject {
-        if (!todoDirectory.exists()) throw new NoSsitProject();
+        checkForSsitProject();
 
         try {
             for (final String issueId : Files.readAllLines(openIssuesFile)) {
@@ -93,5 +99,4 @@ class OnDiskIssues implements IssueStore {
 }
 
 class NoSsitProject extends Exception {
-
 }

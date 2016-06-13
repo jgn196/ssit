@@ -5,7 +5,7 @@ import java.io.PrintStream;
 interface IssueStore {
     void init();
 
-    Issue newIssue(String description);
+    Issue newIssue(String description) throws NoSsitProject;
 
     void close(int issueId);
 

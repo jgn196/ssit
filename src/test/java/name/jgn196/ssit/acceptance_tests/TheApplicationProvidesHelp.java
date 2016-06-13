@@ -51,6 +51,9 @@ public class TheApplicationProvidesHelp {
 
     @Test
     public void byPointingOutWhenItIsRunInADirectoryWithNoSsitProject() throws IOException, InterruptedException {
+        assertThat(applicationRun.runSsit("todo", "ignored"))
+                .contains("no SSIT project");
+
         assertThat(applicationRun.runSsit("list"))
                 .contains("no SSIT project");
     }

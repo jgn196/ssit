@@ -47,7 +47,7 @@ public class Ssit {
         System.out.println("Project initialised.");
     }
 
-    private static void addNewIssue(final String args[]) {
+    private static void addNewIssue(final String args[]) throws NoSsitProject {
         if (args.length != 2) {
             System.out.println("No new issue description provided.\n" +
                     "\n" +

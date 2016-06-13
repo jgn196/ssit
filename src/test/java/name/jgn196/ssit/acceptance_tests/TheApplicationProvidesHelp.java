@@ -56,5 +56,8 @@ public class TheApplicationProvidesHelp {
 
         assertThat(applicationRun.runSsit("list"))
                 .contains("no SSIT project");
+
+        assertThat(applicationRun.runSsit("close", "99"))
+                .contains("no SSIT project");
     }
 }

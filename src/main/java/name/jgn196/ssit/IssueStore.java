@@ -7,7 +7,7 @@ interface IssueStore {
 
     Issue newIssue(String description) throws NoSsitProject;
 
-    void close(int issueId);
+    void close(int issueId) throws NoSsitProject;
 
     void printOutstanding(PrintStream printStream) throws NoSsitProject;
 }

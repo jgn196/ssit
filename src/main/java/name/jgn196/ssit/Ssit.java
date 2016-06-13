@@ -64,7 +64,7 @@ public class Ssit {
         ISSUES.printOutstanding(System.out);
     }
 
-    private static void closeIssue(final String[] args) {
+    private static void closeIssue(final String[] args) throws NoSsitProject {
         if (args.length != 2) {
             System.out.println("No issue ID provided.\n" +
                     "\n" +

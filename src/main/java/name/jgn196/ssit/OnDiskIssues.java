@@ -68,7 +68,9 @@ class OnDiskIssues implements IssueStore {
     }
 
     @Override
-    public void close(final int issueId) {
+    public void close(final int issueId) throws NoSsitProject {
+        checkForSsitProject();
+
         try {
             Files.write(
                     openIssuesFile,

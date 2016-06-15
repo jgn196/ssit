@@ -1,5 +1,6 @@
 package name.jgn196.ssit.acceptance_tests;
 
+import name.jgn196.ssit.ApplicationRun;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

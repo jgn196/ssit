@@ -1,4 +1,4 @@
-package name.jgn196.ssit.acceptance_tests;
+package name.jgn196.ssit;
 
 import org.apache.commons.io.FileUtils;
 
@@ -14,7 +14,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class ApplicationRun implements Closeable {
+public class ApplicationRun implements Closeable {
 
     private static final Path SSIT_CLASS_PATH = Paths.get(".", "build", "classes", "main").toAbsolutePath();
 
@@ -32,9 +32,13 @@ class ApplicationRun implements Closeable {
     }
 
     public String runSsit(final String... commands) throws IOException, InterruptedException {
+        return runSsitIn(testDirectory, commands);
+    }
+
+    public String runSsitIn(final File workingDirectory, final String... commands) throws IOException, InterruptedException {
         final File outputFile = temporaryOutputFile();
         final Process process = new ProcessBuilder(ssitProcessArguments(commands))
-                .directory(testDirectory)
+                .directory(workingDirectory)
                 .redirectError(ProcessBuilder.Redirect.INHERIT)
                 .redirectOutput(ProcessBuilder.Redirect.to(outputFile))
                 .start();

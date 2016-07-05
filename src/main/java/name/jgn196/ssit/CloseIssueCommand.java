@@ -4,6 +4,9 @@ import java.util.function.Supplier;
 
 class CloseIssueCommand extends Command {
 
+    private static final int EXPECTED_ARGUMENT_COUNT = 2;
+    private static final int ISSUE_ID_ARGUMENT_INDEX = 1;
+
     private final String[] args;
     private final Supplier<IssueStore> storeSupplier;
 
@@ -14,15 +17,36 @@ class CloseIssueCommand extends Command {
 
     @Override
     public void run() {
-        if (args.length != 2) {
-            System.out.println("No issue ID provided.\n" +
-                    "\n" +
-                    "usage: ssit close <issue ID>");
-            return;
-        }
+        checkArguments();
 
-        storeSupplier.get().close(Integer.parseInt(args[1]));
+        storeSupplier.get().close(issueId());
 
         System.out.println("Issue closed.");
+    }
+
+    private void checkArguments() {
+        if (args.length != EXPECTED_ARGUMENT_COUNT) {
+
+            throw new BadCommandArguments(
+                    "No issue ID provided.\n" +
+                            "\n" +
+                            "usage: ssit close <issue ID>");
+        }
+    }
+
+    private int issueId() {
+        try {
+            return Integer.parseInt(issueIdText());
+        } catch (final NumberFormatException error) {
+            throw new BadCommandArguments(quote(issueIdText()) + " is not a valid issue ID.", error);
+        }
+    }
+
+    private String issueIdText() {
+        return args[ISSUE_ID_ARGUMENT_INDEX];
+    }
+
+    private static String quote(final String text) {
+        return "'" + text + "'";
     }
 }

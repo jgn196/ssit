@@ -12,10 +12,15 @@ public class ACloseIssueCommand extends StandardOutCapturingTests {
 
     private final IssueStore mockStore = Mockito.mock(IssueStore.class);
 
-    @Test
+    @Test(expected = BadCommandArguments.class)
     public void printsUsageIfIncorrectNumberOfArgumentsSupplied() {
-        assertThat(standardOutFrom(new CloseIssueCommand(INVALID_ARGUMENTS, () -> mockStore)))
-                .startsWith("No issue ID provided");
+        new CloseIssueCommand(INVALID_ARGUMENTS, () -> mockStore).run();
+    }
+
+    @Test(expected = BadCommandArguments.class)
+    public void printsErrorIfIssueIdIsNotANumber() {
+        assertThat(standardOutFrom(new CloseIssueCommand(new String[]{"close", "foo"}, () -> mockStore)))
+                .startsWith("'foo' is not a valid issue ID");
     }
 
     @Test
@@ -27,7 +32,6 @@ public class ACloseIssueCommand extends StandardOutCapturingTests {
 
     @Test
     public void printsCloseSuccess() {
-        assertThat(standardOutFrom(new CloseIssueCommand(VALID_ARGUMENTS, () -> mockStore)))
-                .isEqualTo("Issue closed.");
+        new CloseIssueCommand(VALID_ARGUMENTS, () -> mockStore).run();
     }
 }

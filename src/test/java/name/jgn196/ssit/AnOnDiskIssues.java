@@ -77,7 +77,7 @@ public class AnOnDiskIssues {
         }
     }
 
-    @Test(expected = NoSuchIssue.class)
+    @Test(expected = NoSuchOpenIssue.class)
     public void throwsAnErrorIfClosingAnIssueInEmptyProject() {
         final IssueStore store = new OnDiskIssues(testDirectory);
 
@@ -86,7 +86,7 @@ public class AnOnDiskIssues {
         store.close(1);
     }
 
-    @Test(expected = NoSuchIssue.class)
+    @Test(expected = NoSuchOpenIssue.class)
     public void throwsAnErrorIfClosingAnIssueThatDoesNotExist() {
         final IssueStore store = new OnDiskIssues(testDirectory);
 

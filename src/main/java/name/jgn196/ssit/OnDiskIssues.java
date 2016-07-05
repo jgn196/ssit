@@ -87,11 +87,11 @@ class OnDiskIssues implements IssueStore {
 
     private void checkIssueExists(final int issueId) {
 
-        if (ssitProjectIsEmpty()) throw new NoSuchIssue(issueId);
+        if (ssitProjectIsEmpty()) throw new NoSuchOpenIssue(issueId);
 
         if(openIssueIds().contains(issueId)) return;
 
-        throw new NoSuchIssue(issueId);
+        throw new NoSuchOpenIssue(issueId);
     }
 
     private boolean ssitProjectIsEmpty() {

@@ -14,7 +14,7 @@ class OnDiskIssues implements IssueStore {
     private final Path nextIdFile;
     private final Path openIssuesFile;
 
-    public OnDiskIssues(final File todoDirectory) {
+    OnDiskIssues(final File todoDirectory) {
         this.todoDirectory = todoDirectory;
         nextIdFile = todoDirectory.toPath().resolve("nextId.txt");
         openIssuesFile = todoDirectory.toPath().resolve("open_issues.txt");

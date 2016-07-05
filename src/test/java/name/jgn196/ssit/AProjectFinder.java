@@ -23,8 +23,7 @@ public class AProjectFinder {
 
         final Optional<File> result = new ProjectFinder(searchRootDirectory).find();
 
-        assertThat(result.isPresent()).isTrue();
-        assertThat(result.get()).as("found project directory").isEqualTo(projectDirectory);
+        assertThatExpectedDirectoryFound(result);
     }
 
     private void searchRootDirectoryContainsSsitDirectory() throws IOException {
@@ -44,14 +43,20 @@ public class AProjectFinder {
         assertThat(projectDirectory.mkdir()).isTrue();
     }
 
+    private void assertThatExpectedDirectoryFound(
+            @SuppressWarnings("OptionalUsedAsFieldOrParameterType") final Optional<File> result) {
+        assertThat(result.isPresent()).isTrue();
+        //noinspection OptionalGetWithoutIsPresent
+        assertThat(result.get()).as("found project directory").isEqualTo(projectDirectory);
+    }
+
     @Test
     public void findsTheSsitProjectDirectoryInAParentOfTheSearchRootDirectory() throws IOException {
         searchRootDirectoryIsLevelsAboveProjectDirectoryParent(2);
 
         final Optional<File> result = new ProjectFinder(searchRootDirectory).find();
 
-        assertThat(result.isPresent()).isTrue();
-        assertThat(result.get()).as("found project directory").isEqualTo(projectDirectory);
+        assertThatExpectedDirectoryFound(result);
     }
 
     @Test

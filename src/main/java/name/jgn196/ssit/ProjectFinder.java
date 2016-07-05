@@ -6,7 +6,7 @@ import java.util.Optional;
 class ProjectFinder {
 
     static final String DIRECTORY_NAME = ".todo";
-    
+
     private final File searchRoot;
 
     ProjectFinder(final File searchRoot) {
@@ -22,16 +22,25 @@ class ProjectFinder {
 
         File candidateDirectory = searchRoot;
 
-        while(!projectDirectoryIn(candidateDirectory).exists()) {
-            candidateDirectory = candidateDirectory.getParentFile();
+        while (doesNotContainProjectDirectory(candidateDirectory)) {
 
-            if(candidateDirectory == null) return Optional.empty();
+            if (doesNotHaveParent(candidateDirectory)) return Optional.empty();
+
+            candidateDirectory = candidateDirectory.getParentFile();
         }
 
         return Optional.of(projectDirectoryIn(candidateDirectory));
     }
 
-    private File projectDirectoryIn(final File directory) {
+    private static boolean doesNotContainProjectDirectory(final File directory) {
+        return !projectDirectoryIn(directory).exists();
+    }
+
+    private static boolean doesNotHaveParent(final File file) {
+        return file.getParentFile() == null;
+    }
+
+    private static File projectDirectoryIn(final File directory) {
 
         return directory.toPath().resolve(DIRECTORY_NAME).toFile();
     }

@@ -5,7 +5,6 @@ class CloseIssueCommand extends Command {
     private final String[] args;
 
     CloseIssueCommand(final String[] args) {
-
         this.args = args;
     }
 

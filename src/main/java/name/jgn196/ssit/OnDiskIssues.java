@@ -99,6 +99,3 @@ class OnDiskIssues implements IssueStore {
         }
     }
 }
-
-class NoSsitProject extends Exception {
-}

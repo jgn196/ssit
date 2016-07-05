@@ -16,7 +16,7 @@ abstract class Command implements Runnable {
             case "list":
                 return new ListIssuesCommand(Command::findIssueStore);
             case "close":
-                return new CloseIssueCommand(args);
+                return new CloseIssueCommand(args, Command::findIssueStore);
             default:
                 return new UnknownCommand();
         }

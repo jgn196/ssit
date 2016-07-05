@@ -1,11 +1,15 @@
 package name.jgn196.ssit;
 
+import java.util.function.Supplier;
+
 class CloseIssueCommand extends Command {
 
     private final String[] args;
+    private final Supplier<IssueStore> storeSupplier;
 
-    CloseIssueCommand(final String[] args) {
+    CloseIssueCommand(final String[] args, final Supplier<IssueStore> storeSupplier) {
         this.args = args;
+        this.storeSupplier = storeSupplier;
     }
 
     @Override
@@ -17,7 +21,7 @@ class CloseIssueCommand extends Command {
             return;
         }
 
-        findIssueStore().close(Integer.parseInt(args[1]));
+        storeSupplier.get().close(Integer.parseInt(args[1]));
 
         System.out.println("Issue closed.");
     }

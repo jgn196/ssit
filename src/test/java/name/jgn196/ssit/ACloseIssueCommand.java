@@ -3,8 +3,6 @@ package name.jgn196.ssit;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 public class ACloseIssueCommand extends StandardOutCapturingTests {
 
     private static final String[] INVALID_ARGUMENTS = new String[0];
@@ -13,14 +11,13 @@ public class ACloseIssueCommand extends StandardOutCapturingTests {
     private final IssueStore mockStore = Mockito.mock(IssueStore.class);
 
     @Test(expected = BadCommandArguments.class)
-    public void printsUsageIfIncorrectNumberOfArgumentsSupplied() {
+    public void throwsAnErrorIfIncorrectNumberOfArgumentsSupplied() {
         new CloseIssueCommand(INVALID_ARGUMENTS, () -> mockStore).run();
     }
 
     @Test(expected = BadCommandArguments.class)
-    public void printsErrorIfIssueIdIsNotANumber() {
-        assertThat(standardOutFrom(new CloseIssueCommand(new String[]{"close", "foo"}, () -> mockStore)))
-                .startsWith("'foo' is not a valid issue ID");
+    public void throwsAnErrorIfIssueIdIsNotANumber() {
+        new CloseIssueCommand(new String[]{"close", "foo"}, () -> mockStore).run();
     }
 
     @Test

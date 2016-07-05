@@ -6,6 +6,7 @@ import java.io.PrintStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import java.util.Collection;
 import java.util.stream.Collectors;
 
 class OnDiskIssues implements IssueStore {
@@ -68,8 +69,9 @@ class OnDiskIssues implements IssueStore {
     }
 
     @Override
-    public void close(final int issueId) throws NoSsitProject {
+    public void close(final int issueId) {
         checkForSsitProject();
+        checkIssueExists(issueId);
 
         try {
             Files.write(
@@ -83,11 +85,35 @@ class OnDiskIssues implements IssueStore {
         }
     }
 
+    private void checkIssueExists(final int issueId) {
+
+        if (ssitProjectIsEmpty()) throw new NoSuchIssue(issueId);
+
+        if(openIssueIds().contains(issueId)) return;
+
+        throw new NoSuchIssue(issueId);
+    }
+
+    private boolean ssitProjectIsEmpty() {
+        return !openIssuesFile.toFile().exists();
+    }
+
+    private Collection<Integer> openIssueIds() {
+        try {
+            return Files.readAllLines(openIssuesFile)
+                    .stream()
+                    .map(Integer::parseInt)
+                    .collect(Collectors.toList());
+        } catch (final IOException error) {
+            throw new RuntimeException("Failed to read open issues file.", error);
+        }
+    }
+
     @Override
     public void printOutstanding(final PrintStream printStream) throws NoSsitProject {
         checkForSsitProject();
 
-        if(openIssuesFile.toFile().exists()) {
+        if (openIssuesFile.toFile().exists()) {
             try {
                 for (final String issueId : Files.readAllLines(openIssuesFile)) {
                     final int id = Integer.parseInt(issueId);

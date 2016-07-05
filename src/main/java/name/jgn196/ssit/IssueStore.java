@@ -5,9 +5,9 @@ import java.io.PrintStream;
 interface IssueStore {
     void init();
 
-    Issue newIssue(String description) throws NoSsitProject;
+    Issue newIssue(String description);
 
-    void close(int issueId) throws NoSsitProject;
+    void close(int issueId);
 
-    void printOutstanding(PrintStream printStream) throws NoSsitProject;
+    void printOutstanding(PrintStream printStream);
 }

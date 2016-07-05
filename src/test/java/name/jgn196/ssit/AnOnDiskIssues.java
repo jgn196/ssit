@@ -77,6 +77,25 @@ public class AnOnDiskIssues {
         }
     }
 
+    @Test(expected = NoSuchIssue.class)
+    public void throwsAnErrorIfClosingAnIssueInEmptyProject() {
+        final IssueStore store = new OnDiskIssues(testDirectory);
+
+        store.init();
+
+        store.close(1);
+    }
+
+    @Test(expected = NoSuchIssue.class)
+    public void throwsAnErrorIfClosingAnIssueThatDoesNotExist() {
+        final IssueStore store = new OnDiskIssues(testDirectory);
+
+        store.init();
+        store.newIssue("new issue");
+
+        store.close(2);
+    }
+
     @After
     public void deleteTestDirectory() throws IOException {
 

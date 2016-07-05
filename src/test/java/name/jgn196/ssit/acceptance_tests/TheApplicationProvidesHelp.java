@@ -1,6 +1,7 @@
 package name.jgn196.ssit.acceptance_tests;
 
 import name.jgn196.ssit.ApplicationRun;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -60,5 +61,10 @@ public class TheApplicationProvidesHelp {
 
         assertThat(applicationRun.runSsit("close", "99"))
                 .contains("no SSIT project");
+    }
+
+    @After
+    public void deleteTestDirectory() throws IOException {
+        applicationRun.close();
     }
 }

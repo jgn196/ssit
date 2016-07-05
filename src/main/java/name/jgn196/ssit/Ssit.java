@@ -5,8 +5,6 @@ import java.util.Optional;
 
 public class Ssit {
 
-    static final String DIRECTORY_NAME = ".todo";
-
     private static final String USAGE = "usage: ssit <command> [<args>]\n" +
             "\n" +
             "Commands:\n" +
@@ -50,7 +48,7 @@ public class Ssit {
     }
 
     private static IssueStore issueStoreInWorkingDirectory() {
-        return new OnDiskIssues(new File(DIRECTORY_NAME));
+        return new OnDiskIssues(ProjectFinder.projectDirectoryInWorkingDirectory());
     }
 
     private static void addNewIssue(final String args[]) throws NoSsitProject {

@@ -5,11 +5,17 @@ import java.util.Optional;
 
 class ProjectFinder {
 
+    static final String DIRECTORY_NAME = ".todo";
+    
     private final File searchRoot;
 
     ProjectFinder(final File searchRoot) {
 
         this.searchRoot = searchRoot;
+    }
+
+    static File projectDirectoryInWorkingDirectory() {
+        return new File(DIRECTORY_NAME);
     }
 
     Optional<File> find() {
@@ -27,6 +33,6 @@ class ProjectFinder {
 
     private File projectDirectoryIn(final File directory) {
 
-        return directory.toPath().resolve(Ssit.DIRECTORY_NAME).toFile();
+        return directory.toPath().resolve(DIRECTORY_NAME).toFile();
     }
 }

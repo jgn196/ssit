@@ -39,7 +39,7 @@ public class AProjectFinder {
             assertThat(searchRootDirectory.mkdir()).isTrue();
         }
 
-        projectDirectory = testDirectory.toPath().resolve(Ssit.DIRECTORY_NAME).toFile();
+        projectDirectory = testDirectory.toPath().resolve(ProjectFinder.DIRECTORY_NAME).toFile();
         assertThat(projectDirectory.mkdir()).isTrue();
     }
 

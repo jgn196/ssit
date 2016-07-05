@@ -8,6 +8,7 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.Collection;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 class OnDiskIssues implements IssueStore {
 
@@ -73,16 +74,9 @@ class OnDiskIssues implements IssueStore {
         checkForSsitProject();
         checkIssueExists(issueId);
 
-        try {
-            Files.write(
-                    openIssuesFile,
-                    Files.readAllLines(openIssuesFile)
-                            .stream()
-                            .filter(id -> !id.equals(Integer.toString(issueId)))
-                            .collect(Collectors.toList()));
-        } catch (final IOException e) {
-            throw new RuntimeException("Failed to update open issues file.", e);
-        }
+        save(openIssueIds()
+                .stream()
+                .filter(id -> id != issueId));
     }
 
     private void checkIssueExists(final int issueId) {
@@ -106,6 +100,18 @@ class OnDiskIssues implements IssueStore {
                     .collect(Collectors.toList());
         } catch (final IOException error) {
             throw new RuntimeException("Failed to read open issues file.", error);
+        }
+    }
+
+    private void save(final Stream<Integer> issueIds) {
+        try {
+            Files.write(
+                    openIssuesFile,
+                    issueIds
+                            .map(id -> Integer.toString(id))
+                            .collect(Collectors.toList()));
+        } catch (final IOException error) {
+            throw new RuntimeException("Failed to update open issues file.", error);
         }
     }
 

@@ -1,7 +1,8 @@
 package name.jgn196.ssit;
 
-/**
- * Created by jnash on 05/07/2016.
- */
-class NoSsitProject extends Exception {
+class NoSsitProject extends SsitFailure {
+
+    NoSsitProject() {
+        super("There is no SSIT project in the current directory (or any of its parents).");
+    }
 }

@@ -35,7 +35,7 @@ public class ApplicationRun implements Closeable {
         return runSsitIn(testDirectory, commands);
     }
 
-    public String runSsitIn(final File workingDirectory, final String... commands) throws IOException, InterruptedException {
+    String runSsitIn(final File workingDirectory, final String... commands) throws IOException, InterruptedException {
         final File outputFile = temporaryOutputFile();
         final Process process = new ProcessBuilder(ssitProcessArguments(commands))
                 .directory(workingDirectory)

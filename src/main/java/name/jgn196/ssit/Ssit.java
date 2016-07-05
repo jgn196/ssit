@@ -4,7 +4,9 @@ import java.io.File;
 
 public class Ssit {
 
-    private static final IssueStore ISSUES = new OnDiskIssues(new File(".todo"));
+    public static final String DIRECTORY_NAME = ".todo";
+
+    private static final IssueStore ISSUES = new OnDiskIssues(new File(DIRECTORY_NAME));
     private static final String USAGE = "usage: ssit <command> [<args>]\n" +
             "\n" +
             "Commands:\n" +

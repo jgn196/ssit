@@ -87,15 +87,17 @@ class OnDiskIssues implements IssueStore {
     public void printOutstanding(final PrintStream printStream) throws NoSsitProject {
         checkForSsitProject();
 
-        try {
-            for (final String issueId : Files.readAllLines(openIssuesFile)) {
-                final int id = Integer.parseInt(issueId);
-                final String description = new String(
-                        Files.readAllBytes(todoDirectory.toPath().resolve(issueId + ".txt")), "UTF-8");
-                printStream.println(new Issue(id, description).toString());
+        if(openIssuesFile.toFile().exists()) {
+            try {
+                for (final String issueId : Files.readAllLines(openIssuesFile)) {
+                    final int id = Integer.parseInt(issueId);
+                    final String description = new String(
+                            Files.readAllBytes(todoDirectory.toPath().resolve(issueId + ".txt")), "UTF-8");
+                    printStream.println(new Issue(id, description).toString());
+                }
+            } catch (final IOException e) {
+                throw new RuntimeException("Failed to read open issues file.", e);
             }
-        } catch (final IOException e) {
-            throw new RuntimeException("Failed to read open issues file.", e);
         }
     }
 }

@@ -23,6 +23,21 @@ public class AnOnDiskIssues {
     }
 
     @Test
+    public void startsEmpty() throws IOException, NoSsitProject {
+        final IssueStore store = new OnDiskIssues(testDirectory);
+
+        store.init();
+
+        try (final ByteArrayOutputStream results = new ByteArrayOutputStream()) {
+            try (final PrintStream printStream = new PrintStream(results)) {
+                store.printOutstanding(printStream);
+            }
+
+            assertThat(new String(results.toByteArray())).isEmpty();
+        }
+    }
+
+    @Test
     public void tracksNewIssues() throws IOException, NoSsitProject {
         final IssueStore store = new OnDiskIssues(testDirectory);
 

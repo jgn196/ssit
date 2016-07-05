@@ -1,12 +1,12 @@
 package name.jgn196.ssit;
 
 import java.io.File;
+import java.util.Optional;
 
 public class Ssit {
 
-    public static final String DIRECTORY_NAME = ".todo";
+    static final String DIRECTORY_NAME = ".todo";
 
-    private static final IssueStore ISSUES = new OnDiskIssues(new File(DIRECTORY_NAME));
     private static final String USAGE = "usage: ssit <command> [<args>]\n" +
             "\n" +
             "Commands:\n" +
@@ -45,8 +45,12 @@ public class Ssit {
     }
 
     private static void initialiseIssueStore() {
-        ISSUES.init();
+        issueStoreInWorkingDirectory().init();
         System.out.println("Project initialised.");
+    }
+
+    private static IssueStore issueStoreInWorkingDirectory() {
+        return new OnDiskIssues(new File(DIRECTORY_NAME));
     }
 
     private static void addNewIssue(final String args[]) throws NoSsitProject {
@@ -57,13 +61,21 @@ public class Ssit {
             return;
         }
 
-        ISSUES.newIssue(args[1]);
+        findIssueStore().newIssue(args[1]);
 
         System.out.println("Issue added.");
     }
 
+    private static IssueStore findIssueStore() throws NoSsitProject {
+        final Optional<File> projectDirectory = new ProjectFinder(new File(".").getAbsoluteFile()).find();
+
+        if(projectDirectory.isPresent()) return new OnDiskIssues(projectDirectory.get());
+
+        throw new NoSsitProject();
+    }
+
     private static void printOutstandingIssues() throws NoSsitProject{
-        ISSUES.printOutstanding(System.out);
+        findIssueStore().printOutstanding(System.out);
     }
 
     private static void closeIssue(final String[] args) throws NoSsitProject {
@@ -74,7 +86,7 @@ public class Ssit {
             return;
         }
 
-        ISSUES.close(Integer.parseInt(args[1]));
+        findIssueStore().close(Integer.parseInt(args[1]));
 
         System.out.println("Issue closed.");
     }

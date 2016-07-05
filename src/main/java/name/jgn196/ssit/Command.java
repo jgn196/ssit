@@ -22,7 +22,7 @@ abstract class Command implements Runnable {
         }
     }
 
-    static IssueStore findIssueStore() throws NoSsitProject {
+    private static IssueStore findIssueStore() throws NoSsitProject {
         final File workingDirectory = new File(".").getAbsoluteFile();
         final Optional<File> projectDirectory = new ProjectFinder(workingDirectory).find();
 

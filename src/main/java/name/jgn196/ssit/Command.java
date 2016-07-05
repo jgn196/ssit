@@ -12,7 +12,7 @@ abstract class Command implements Runnable {
             case "init":
                 return new InitialiseCommand();
             case "todo":
-                return new NewIssueCommand(args);
+                return new NewIssueCommand(args, Command::findIssueStore);
             case "list":
                 return new ListIssuesCommand();
             case "close":

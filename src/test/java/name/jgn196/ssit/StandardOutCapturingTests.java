@@ -3,9 +3,6 @@ package name.jgn196.ssit;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
-/**
- * Created by jnash on 05/07/2016.
- */
 class StandardOutCapturingTests {
     String standardOutFrom(final Runnable task) {
         final PrintStream stdOut = System.out;
@@ -19,6 +16,6 @@ class StandardOutCapturingTests {
 
         System.setOut(stdOut);
 
-        return new String(capturedOutput.toByteArray());
+        return new String(capturedOutput.toByteArray()).trim();
     }
 }

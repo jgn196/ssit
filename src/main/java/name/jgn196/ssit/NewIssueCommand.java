@@ -1,11 +1,15 @@
 package name.jgn196.ssit;
 
+import java.util.function.Supplier;
+
 class NewIssueCommand extends Command {
 
     private final String[] args;
+    private final Supplier<IssueStore> storeSupplier;
 
-    NewIssueCommand(final String[] args) {
+    NewIssueCommand(final String[] args, final Supplier<IssueStore> storeSupplier) {
         this.args = args;
+        this.storeSupplier = storeSupplier;
     }
 
     @Override
@@ -17,7 +21,7 @@ class NewIssueCommand extends Command {
             return;
         }
 
-        findIssueStore().newIssue(args[1]);
+        storeSupplier.get().newIssue(args[1]);
 
         System.out.println("Issue added.");
     }

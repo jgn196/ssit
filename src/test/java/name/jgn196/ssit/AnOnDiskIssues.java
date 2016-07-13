@@ -2,29 +2,25 @@ package name.jgn196.ssit;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class AnOnDiskIssues {
 
-    private File testDirectory;
-
-    @Before
-    public void createTestDirectory() throws IOException {
-        testDirectory = Files.createTempDirectory("ssit_test").toFile();
-    }
+    private static final String TEMP_DIRECTORY_PATH = System.getProperty("java.io.tmpdir");
+    private static final String TEST_DIRECTORY_NAME = "ssit_test";
+    private static final File TEST_DIRECTORY = Paths.get(TEMP_DIRECTORY_PATH, TEST_DIRECTORY_NAME).toFile();
 
     @Test
-    public void startsEmpty() throws IOException, NoSsitProject {
-        final IssueStore store = new OnDiskIssues(testDirectory);
+    public void startsEmpty() throws IOException {
+        final IssueStore store = new OnDiskIssues(TEST_DIRECTORY);
 
         store.init();
 
@@ -39,7 +35,7 @@ public class AnOnDiskIssues {
 
     @Test
     public void tracksNewIssues() throws IOException, NoSsitProject {
-        final IssueStore store = new OnDiskIssues(testDirectory);
+        final IssueStore store = new OnDiskIssues(TEST_DIRECTORY);
 
         store.init();
 
@@ -56,7 +52,7 @@ public class AnOnDiskIssues {
 
     @Test
     public void closesIssuesById() throws IOException, NoSsitProject {
-        final IssueStore store = new OnDiskIssues(testDirectory);
+        final IssueStore store = new OnDiskIssues(TEST_DIRECTORY);
 
         store.init();
 
@@ -77,9 +73,17 @@ public class AnOnDiskIssues {
         }
     }
 
+    @Test(expected = ProjectAlreadyInitialised.class)
+    public void throwsAnErrorIfReinitialisingProject() {
+        final IssueStore store = new OnDiskIssues(TEST_DIRECTORY);
+
+        store.init();
+        store.init();
+    }
+
     @Test(expected = NoSuchOpenIssue.class)
     public void throwsAnErrorIfClosingAnIssueInEmptyProject() {
-        final IssueStore store = new OnDiskIssues(testDirectory);
+        final IssueStore store = new OnDiskIssues(TEST_DIRECTORY);
 
         store.init();
 
@@ -88,7 +92,7 @@ public class AnOnDiskIssues {
 
     @Test(expected = NoSuchOpenIssue.class)
     public void throwsAnErrorIfClosingAnIssueThatDoesNotExist() {
-        final IssueStore store = new OnDiskIssues(testDirectory);
+        final IssueStore store = new OnDiskIssues(TEST_DIRECTORY);
 
         store.init();
         store.newIssue("new issue");
@@ -99,9 +103,9 @@ public class AnOnDiskIssues {
     @After
     public void deleteTestDirectory() throws IOException {
 
-        if (testDirectory.exists() && testDirectory.isDirectory()) {
+        if (TEST_DIRECTORY.exists() && TEST_DIRECTORY.isDirectory()) {
 
-            FileUtils.deleteDirectory(testDirectory);
+            FileUtils.deleteDirectory(TEST_DIRECTORY);
         }
     }
 }

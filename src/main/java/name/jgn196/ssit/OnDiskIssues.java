@@ -27,6 +27,9 @@ class OnDiskIssues implements IssueStore {
         if (!todoDirectory.exists()) {
             if (!todoDirectory.mkdir()) throw new RuntimeException("Failed to create issue storage.");
         }
+        else {
+            throw new ProjectAlreadyInitialised(todoDirectory);
+        }
     }
 
     @Override
@@ -83,7 +86,7 @@ class OnDiskIssues implements IssueStore {
 
         if (ssitProjectIsEmpty()) throw new NoSuchOpenIssue(issueId);
 
-        if(openIssueIds().contains(issueId)) return;
+        if (openIssueIds().contains(issueId)) return;
 
         throw new NoSuchOpenIssue(issueId);
     }

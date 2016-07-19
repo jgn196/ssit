@@ -1,0 +1,1 @@
+Improve test coverage detection for tests that currently run SSIT in another process.
